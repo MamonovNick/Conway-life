@@ -1,0 +1,43 @@
+name:                conway-life
+version:             0.1.0.0
+synopsis:            Initial project template from stack
+description:         Please see README.md
+homepage:            http://github.com/cmc-haskell-2016/conway-life#readme
+license:             BSD3
+license-file:        LICENSE
+author:              conway-life Team
+maintainer:          conway-life@example.com
+copyright:           2016 conway-life Team
+category:            Experimental
+build-type:          Simple
+-- extra-source-files:
+cabal-version:       >=1.10
+
+library
+  ghc-options: -Wall
+  hs-source-dirs:      src
+  exposed-modules:     Lib
+  build-depends:       base >= 4.7 && < 5
+  default-language:    Haskell2010
+
+executable conway-life
+  ghc-options: -Wall
+  hs-source-dirs:      app
+  main-is:             Main.hs
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+                     , conway-life
+  default-language:    Haskell2010
+
+test-suite conway-life-test
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test
+  main-is:             Spec.hs
+  build-depends:       base
+                     , conway-life
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  default-language:    Haskell2010
+
+source-repository head
+  type:     git
+  location: https://github.com/cmc-haskell-2016/conway-life
