@@ -1,8 +1,5 @@
 module Main where
 
-import Lib
+import Game_graphics
 
-main :: IO ()
-main = do
-  s <- getLine
-  putStrLn (someFunc s)
+main = start_life

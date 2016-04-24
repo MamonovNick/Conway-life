@@ -16,7 +16,7 @@ cabal-version:       >=1.10
 library
   ghc-options: -Wall
   hs-source-dirs:      src
-  exposed-modules:     Config, Types, Game_graphics, Game_logic
+  exposed-modules:     Config, Types, Game_graphics
   build-depends:       base >= 4.7 && < 5
                      , gloss >= 1.8.0
   default-language:    Haskell2010
