@@ -18,7 +18,7 @@ window = InWindow
         (100, 50)      -- window offset
 
 initWorld :: LifeWorld
-initWorld = (fillCellList, (True, 10, 10))
+initWorld = (fillCellList, (False, 10, 10))
 
 worldToPic :: LifeWorld -> Picture
 worldToPic w = Pictures (makeSc w)

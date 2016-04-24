@@ -5,7 +5,7 @@ import Types
 
 --Config Simulation
 numSimStep :: Int
-numSimStep = 50
+numSimStep = 60
 
 -- Size of window
 hWin :: Int
