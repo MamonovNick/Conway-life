@@ -18,13 +18,13 @@ window = InWindow
         (100, 50)      -- window offset
 
 initWorld :: LifeWorld
-initWorld = (fillCellList, (False, 10, 10))
+initWorld = (fillCellList, (True, 10, 10), (True, 10, 10))
 
 worldToPic :: LifeWorld -> Picture
 worldToPic w = Pictures (makeSc w)
 
 makeSc :: LifeWorld -> [Picture]
-makeSc (cells, ctrl) = (drawField cells) ++ (drawCtrlbar ctrl)
+makeSc (cells, ctrl', _) = (drawField cells) ++ (drawCtrlbar ctrl')
 
 drawField :: AliveCells -> [Picture]
 drawField cells = drawR rowNum cells
@@ -49,7 +49,7 @@ dCell = Pictures
         [ Color black   (rectangleSolid (fromIntegral cellXsize) (fromIntegral cellYsize))]
 
 drawCtrlbar :: Control -> [Picture]
-drawCtrlbar (b, _, _) = (Translate (fromIntegral barXoff) (fromIntegral barYoff) dBar):(drawPlay b):(drawStop):(drawSpUp):(drawSpDn):[]
+drawCtrlbar (b, _, _) = (Translate (fromIntegral barXoff) (fromIntegral barYoff) dBar):(drawPlay b):(drawStop):(drawSpUp):(drawSpDn):(drawFast):[]
 
 dBar :: Picture
 dBar = Pictures
@@ -80,23 +80,32 @@ drawSpDn = Translate (fromIntegral barXoff - 105) (fromIntegral barYoff)
         $ Rotate 180
         $ unsafePerformIO (loadBMP "data/stepfwd.bmp")
 
+drawFast :: Picture
+drawFast = Translate (fromIntegral barXoff + 150) (fromIntegral barYoff)
+        $ Scale 0.95 0.95
+        $ Rotate 180
+        $ unsafePerformIO (loadBMP "data/fastf.bmp")
+
 event_handler :: Event -> LifeWorld -> LifeWorld
-event_handler (EventKey (SpecialKey KeySpace) Down _ _) (w, (b, i, m)) | b == True = (w, (False, i, m))
-                                                                       | otherwise = (w, (True, i, m))
-event_handler (EventKey (MouseButton LeftButton) Down _ (x, y)) (w, (b, i, m)) | (x >= (fromIntegral barXoff + 12)) && (x <= (fromIntegral barXoff + 58)) && (y >= (fromIntegral barYoff - 23)) && (y <= (fromIntegral barYoff + 23)) && (b == True) = (w, (False, i, m))
-                                                                               |(x >= (fromIntegral barXoff + 12)) && (x<= (fromIntegral barXoff + 58)) && (y >= (fromIntegral barYoff - 23)) && (y <= (fromIntegral barYoff + 23)) && (b == False) = (w, (True, i, m))
-event_handler (EventKey (MouseButton LeftButton) Down _ (x, y)) (w, (b, i, m)) | (x >= (fromIntegral barXoff - 58)) && (x <= (fromIntegral barXoff - 12)) && (y >= (fromIntegral barYoff - 23)) && (y <= (fromIntegral barYoff + 23)) = initWorld
-                                                                               |(x >= (fromIntegral barXoff + 82)) && (x<= (fromIntegral barXoff + 128)) && (y >= (fromIntegral barYoff - 23)) && (y <= (fromIntegral barYoff + 23)) && (m > 1) = (w, (b, i, m - 2))
-                                                                               |(x >= (fromIntegral barXoff + 82)) && (x<= (fromIntegral barXoff + 128)) && (y >= (fromIntegral barYoff - 23)) && (y <= (fromIntegral barYoff + 23)) && (m <= 1) = (w, (b, i, 0))
-                                                                               |(x >= (fromIntegral barXoff - 128)) && (x<= (fromIntegral barXoff - 82)) && (y >= (fromIntegral barYoff - 23)) && (y <= (fromIntegral barYoff + 23)) && (m <= numSimStep) = (w, (b, i, m + 2))
-                                                                               |(x >= (fromIntegral barXoff - 128)) && (x<= (fromIntegral barXoff - 82)) && (y >= (fromIntegral barYoff - 23)) && (y <= (fromIntegral barYoff + 23)) && (m > numSimStep) = (w, (b, i, numSimStep))
-                                                                               | otherwise = (w, (b, i, m))
+event_handler (EventKey (SpecialKey KeySpace) Down _ _) (w, (b, i, m), q) | b == True = (w, (False, i, m), q)
+                                                                          | otherwise = (w, (True, i, m), q)
+event_handler (EventKey (MouseButton LeftButton) Down _ (x, y)) (w, (b, i, m), (b1, i1, m1)) | (x >= (fromIntegral barXoff + 12)) && (x <= (fromIntegral barXoff + 58)) && (y >= (fromIntegral barYoff - 23)) && (y <= (fromIntegral barYoff + 23)) && (b == True) = (w, (False, i, m), (b1, i1, m1))
+                                                                               |(x >= (fromIntegral barXoff + 12)) && (x<= (fromIntegral barXoff + 58)) && (y >= (fromIntegral barYoff - 23)) && (y <= (fromIntegral barYoff + 23)) && (b == False) = (w, (True, i, m), (b1, i1, m1))
+                                                                               | (x >= (fromIntegral barXoff - 58)) && (x <= (fromIntegral barXoff - 12)) && (y >= (fromIntegral barYoff - 23)) && (y <= (fromIntegral barYoff + 23)) = initWorld
+                                                                               |(x >= (fromIntegral barXoff + 82)) && (x<= (fromIntegral barXoff + 128)) && (y >= (fromIntegral barYoff - 23)) && (y <= (fromIntegral barYoff + 23)) && (m > 1) = (w, (b, i, m - 2), (b1, i1, m1))
+                                                                               |(x >= (fromIntegral barXoff + 82)) && (x<= (fromIntegral barXoff + 128)) && (y >= (fromIntegral barYoff - 23)) && (y <= (fromIntegral barYoff + 23)) && (m <= 1) = (w, (b, i, 0), (b1, i1, m1))
+                                                                               |(x >= (fromIntegral barXoff - 128)) && (x<= (fromIntegral barXoff - 82)) && (y >= (fromIntegral barYoff - 23)) && (y <= (fromIntegral barYoff + 23)) && (m <= numSimStep) = (w, (b, i, m + 2), (b1, i1, m1))
+                                                                               |(x >= (fromIntegral barXoff - 128)) && (x<= (fromIntegral barXoff - 82)) && (y >= (fromIntegral barYoff - 23)) && (y <= (fromIntegral barYoff + 23)) && (m > numSimStep) = (w, (b, i, numSimStep), (b1, i1, m1))
+                                                                               |(x >= (fromIntegral barXoff + 134)) && (x<= (fromIntegral barXoff + 166)) && (y >= (fromIntegral barYoff - 16)) && (y <= (fromIntegral barYoff + 16)) = (w, (True, 1, 1), (b, i, m))
+                                                                               | otherwise = (w, (b, i, m), (b1, i1, m1))
+event_handler (EventKey (MouseButton LeftButton) Up _ (x, y)) (w, (b, i, m), (b1, i1, m1)) |(x >= (fromIntegral barXoff + 134)) && (x<= (fromIntegral barXoff + 166)) && (y >= (fromIntegral barYoff - 16)) && (y <= (fromIntegral barYoff + 16)) = (w, (b1, i1, m1), (b, i, m))
+                                                                               | otherwise = (w, (b, i, m), (b1, i1, m1))
 event_handler _ w = w
 
 simIter :: Float -> LifeWorld -> LifeWorld
-simIter _ (w, (False, i, m)) = (w, (False, i, m))
-simIter _ (w, (_, i, m)) | i == 0 = (lifeStep w, (True, m, m))
-                         | otherwise = (w, (True, i - 1, m))
+simIter _ (w, (False, i, m), q) = (w, (False, i, m), q)
+simIter _ (w, (_, i, m), q) | i == 0 = (lifeStep w, (True, m, m), q)
+                            | otherwise = (w, (True, i - 1, m), q)
 
 
 
