@@ -22,7 +22,7 @@ barYsize :: Int
 barYsize = 60
 
 barXoff :: Int
-barXoff =  0
+barXoff =  -10
 
 barYoff :: Int
 barYoff = - hWin `div` 2 + barYsize `div` 2 + 5
