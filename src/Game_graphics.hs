@@ -56,6 +56,7 @@ dBar = Pictures
         [ Color (greyN 0.4)     (rectangleSolid (fromIntegral barXsize) (fromIntegral barYsize))
         , Color black   (rectangleWire  (fromIntegral barXsize) (fromIntegral barYsize)) ]
 
+-------draw buttons----------
 drawPlay :: Bool -> Picture
 drawPlay True = Translate (fromIntegral barXoff + 35) (fromIntegral barYoff)
              $ Scale 0.35 0.35
@@ -85,7 +86,7 @@ drawFast = Translate (fromIntegral barXoff + 150) (fromIntegral barYoff)
         $ Scale 0.95 0.95
         $ Rotate 180
         $ unsafePerformIO (loadBMP "data/fastf.bmp")
-
+-----------------------------
 event_handler :: Event -> LifeWorld -> LifeWorld
 event_handler (EventKey (SpecialKey KeySpace) Down _ _) (w, (b, i, m), q) | b == True = (w, (False, i, m), q)
                                                                           | otherwise = (w, (True, i, m), q)
@@ -101,7 +102,7 @@ event_handler (EventKey (MouseButton LeftButton) Down _ (x, y)) (w, (b, i, m), (
 event_handler (EventKey (MouseButton LeftButton) Up _ (x, y)) (w, (b, i, m), (b1, i1, m1)) |(x >= (fromIntegral barXoff + 134)) && (x<= (fromIntegral barXoff + 166)) && (y >= (fromIntegral barYoff - 16)) && (y <= (fromIntegral barYoff + 16)) = (w, (b1, i1, m1), (b, i, m))
                                                                                | otherwise = (w, (b, i, m), (b1, i1, m1))
 event_handler _ w = w
-
+-----------------------------
 simIter :: Float -> LifeWorld -> LifeWorld
 simIter _ (w, (False, i, m), q) = (w, (False, i, m), q)
 simIter _ (w, (_, i, m), q) | i == 0 = (lifeStep w, (True, m, m), q)

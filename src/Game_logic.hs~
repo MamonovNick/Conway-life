@@ -1,6 +1,7 @@
 module Game_logic(fillCellList, lifeStep) where
 
 import Types
+import Config
 import Data.List
 import System.IO.Unsafe
 import Prelude hiding (catch)
@@ -56,5 +57,5 @@ makeSurround :: AliveCells -> [AliveCells]
 makeSurround = group . sort . concatMap surrounding
 
 surrounding :: (Int, Int) -> AliveCells
-surrounding (x, y) = [(x+dx, y+dy) | dx <- [-1..1], dy <- [-1..1], (dx,dy) /= (0,0)]
+surrounding (x, y) = [(x+dx, y+dy) | dx <- [-1..1], dy <- [-1..1], (dx,dy) /= (0,0), x+dx <= colNum, x+dx >= 0, y+dy <= rowNum, y+dy >= 0]
 

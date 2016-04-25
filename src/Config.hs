@@ -9,7 +9,7 @@ numSimStep = 60
 
 -- Size of window
 hWin :: Int
-hWin = 600
+hWin = 700
 
 wWin :: Int
 wWin = 800
@@ -42,11 +42,11 @@ fieldYoff = cellYsize * rowNum `div` 2
 
 -- Number of row
 rowNum :: Int
-rowNum = 50
+rowNum = 60
 
 --Number of col
 colNum :: Int
-colNum = 50
+colNum = 80
 
 -- Colors of things
 backgroundColor   = greyN 0.2
