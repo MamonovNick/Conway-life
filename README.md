@@ -1,6 +1,6 @@
 # conway-life
 
-[![Conway Life](/conway-life)]
+![Conway Life](screenshots/conway-life.bmp)
 
 [![Build Status](https://travis-ci.org/cmc-haskell-2016/conway-life.svg?branch=master)](https://travis-ci.org/cmc-haskell-2016/conway-life)
 
