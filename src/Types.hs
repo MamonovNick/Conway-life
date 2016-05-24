@@ -1,5 +1,25 @@
 module Types where
 
-type LifeWorld = (AliveCells, Control, Control) -- Second Control for backup current config
-type AliveCells = [(Int, Int)]
-type Control = (Bool, Int, Int)
+type Coords = (Int, Int)
+
+type AliveCells = [Coords]
+
+type Rect = (Float, Float, Float, Float)
+
+-- Second Control for backup current config
+data LifeWorld = LifeWorld { aliveCells :: AliveCells
+                           , ctrlM :: Control
+                           , ctrlA :: Control
+                           , menu :: Menu
+                           }
+
+data Control = Control { state :: Bool
+                       , time :: Int
+                       , maxTime :: Int
+                       }
+
+data Menu = Menu { activeMenu :: Bool
+                 , activeClick :: Bool
+                 , lastCell :: Coords
+                 }
+

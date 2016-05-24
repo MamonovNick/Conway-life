@@ -4,28 +4,26 @@ import Types
 import Config
 import Data.List
 import System.IO.Unsafe
-import Prelude hiding (catch)
+import Prelude
 import Control.Exception
-import System.Environment
-import System.IO.Error (isDoesNotExistError)
 
 fillCellList :: AliveCells
 fillCellList = unsafePerformIO (fH `catch` handler)
 
 --handle exception in reading
 handler :: IOException -> IO (AliveCells)
-handler e = return ([(1, 0), (2, 1), (0, 2), (1, 2), (2, 2), (18, 0), (18, 1), (18, 2)])
+handler _ = return ([(1, 0), (2, 1), (0, 2), (1, 2), (2, 2), (18, 0), (18, 1), (18, 2)])
 
 -----Read from file.in
 fH :: IO(AliveCells)
 fH = do
-        src <- readFile "file.in"
+        src <- readFile "gun.in"
         return (operate (charToInt src 0 False))
 
 --make AliveCells from list of Int
 operate :: [Int] -> AliveCells
 operate [] = []
-operate (x:[]) = []
+operate (_:[]) = []
 operate (x:y:xs) = (x, y):(operate xs)
 
 --changing string into list of int
@@ -52,5 +50,5 @@ makeSurround = group . sort . concatMap surrounding
 
 --create list of surrounding cells
 surrounding :: (Int, Int) -> AliveCells
-surrounding (x, y) = [(x+dx, y+dy) | dx <- [-1..1], dy <- [-1..1], (dx,dy) /= (0,0), x+dx <= (colNum - 1), x+dx >= 0, y+dy <= (rowNum - 1), y+dy >= 0]
+surrounding (x, y) = [(x+dx, y+dy) | dx <- [-1..1], dy <- [-1..1], (dx,dy) /= (0,0), x+dx <= (rowNum - 1), x+dx >= 0, y+dy <= (colNum - 1), y+dy >= 0]
 

@@ -1,18 +1,30 @@
 module Config where
 
 import Graphics.Gloss
-import Types
 
 --Config Simulation
 numSimStep :: Int
-numSimStep = 60
+numSimStep = 120
 
 -- Size of window
 hWin :: Int
 hWin = 700
 
 wWin :: Int
-wWin = 800
+wWin = 1050
+
+--Param of menu
+butXoff :: Float
+butXoff = -436
+
+butYoff :: Float
+butYoff = 227
+
+txtXoff :: Int
+txtXoff = -500
+
+txtYoff :: Int
+txtYoff = 220
 
 -- Param of bar
 barXsize :: Int
@@ -21,11 +33,11 @@ barXsize = 350
 barYsize :: Int
 barYsize = 60
 
-barXoff :: Int
+barXoff :: Float
 barXoff =  -10
 
-barYoff :: Int
-barYoff = - hWin `div` 2 + barYsize `div` 2 + 5
+barYoff :: Float
+barYoff = - (fromIntegral hWin) / 2 + (fromIntegral barYsize) / 2 + 5
 
 -- Param of field
 cellXsize :: Int
@@ -49,9 +61,6 @@ colNum :: Int
 colNum = 80
 
 -- Colors of things
+backgroundColor :: Color
 backgroundColor   = greyN 0.2
-deadColor	  = black
-livingColor	  = white
-testColor         = makeColor 0.8 0.2 0.2 0.4
-
 
